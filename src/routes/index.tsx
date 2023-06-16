@@ -5,8 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../pages/Home';
 import NewRevenue from '../pages/NewRevenue';
 import { NavigationContainer } from '@react-navigation/native';
+import { RootParamList } from '../utils/types';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootParamList>();
 
 const Routes: React.FC = () => {
     return (
