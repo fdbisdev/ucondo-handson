@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native";
 
-import { SCREEN_HEIGHT, StatusBarManager } from "../../utils/constants";
+import { SCREEN_HEIGHT, StatusBarManager, colors } from "../../utils/constants";
 
 const styles = StyleSheet.create({
     searchBarContainer: {
-        backgroundColor: '#F0EDF5',
+        backgroundColor: colors.secondary,
         marginTop: StatusBarManager.HEIGHT + 55,
         marginHorizontal: 21,
         flexDirection: 'row',

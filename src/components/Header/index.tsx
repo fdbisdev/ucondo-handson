@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { IHeader, RootParamList } from '../../utils/types';
+import { colors } from '../../utils/constants';
 
 const Header: React.FC<IHeader> = ({ title, rightIcon, leftIcon, pressableFunction }: IHeader) => {
 
@@ -25,7 +26,7 @@ const Header: React.FC<IHeader> = ({ title, rightIcon, leftIcon, pressableFuncti
                             >
                                 <FontAwesomeIcon
                                     size={28}
-                                    color='#FFF'
+                                    color={colors.white}
                                     icon={leftIcon}
                                 />
                             </Pressable>
@@ -38,7 +39,7 @@ const Header: React.FC<IHeader> = ({ title, rightIcon, leftIcon, pressableFuncti
                 >
                     <FontAwesomeIcon
                         size={28}
-                        color='#FFF'
+                        color={colors.white}
                         icon={rightIcon}
                     />
                 </Pressable>

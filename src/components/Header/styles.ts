@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from "react-native";
 
-import { SCREEN_HEIGHT, StatusBarManager } from "../../utils/constants";
+import { SCREEN_HEIGHT, StatusBarManager, colors } from "../../utils/constants";
 
 const styles = StyleSheet.create({
     container: {
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     title: {
-        color: '#fff',
+        color: colors.white,
         fontSize: 22,
         fontWeight: Platform.OS === 'ios' ? '700' : 'bold',
     },

@@ -1,10 +1,10 @@
 import { Platform, StyleSheet } from "react-native";
 
-import { SCREEN_HEIGHT, StatusBarManager } from "../../utils/constants";
+import { SCREEN_HEIGHT, colors } from "../../utils/constants";
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#F0EDF5',
+        backgroundColor: colors.secondary,
         flex: 1,
         borderTopRightRadius: 24,
         borderTopLeftRadius: 24,
@@ -18,16 +18,16 @@ const styles = StyleSheet.create({
     listHeaderTitle: {
         fontSize: 20,
         fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
-        color: '#3D3D4C',
+        color: colors.title,
     },
     listHeaderRegisters: {
-        color: '#A0A0B2',
+        color: colors.subtitle,
         fontSize: 15,
         fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
     },
     listElement: {
         marginHorizontal: 22,
-        backgroundColor: '#FFF',
+        backgroundColor: colors.white,
         borderRadius: 16,
         padding: 20,
         marginTop: 18,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modal: {
-        backgroundColor: '#FFF',
+        backgroundColor: colors.white,
         borderRadius: 16,
         paddingVertical: 36,
         alignItems: 'center',
@@ -71,29 +71,29 @@ const styles = StyleSheet.create({
     }, 
     modalTitle: {
         fontSize: 15,
-        color: '#6C6C80',
+        color: colors.lightGray,
         fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
         fontStyle: 'normal',
     }, 
     cancelButton: {
-        color: '#FF6680',
+        color: colors.negativeButton,
         fontSize: 15,
         fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
         fontStyle: 'normal',
     },
     cancelButtonContainer: {
         width: 120,
-        borderColor: '#FF6680',
+        borderColor: colors.negativeButton,
         borderWidth: 1,
         borderRadius: 100,
         paddingHorizontal: 24,
         paddingVertical: 11,
-        backgroundColor: '#FFF',
+        backgroundColor: colors.white,
         alignItems: 'center',
         justifyContent: 'center',
     },
     confirmButtonContainer: {
-        backgroundColor: '#FF6680',
+        backgroundColor: colors.negativeButton,
         borderRadius: 100,
         paddingHorizontal: 24,
         paddingVertical: 11,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         width: 140,
     }, 
     confirmButton: {
-        color: '#FFF',
+        color: colors.white,
         fontSize: 15,
         fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
         fontStyle: 'normal',
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     dropDownPicker: {
         marginTop: 4,
         width: '100%',
-        borderColor: '#E6E6F0',
+        borderColor: colors.border,
         borderWidth: 1,
         borderRadius: 10,
         zIndex: 1,
@@ -123,13 +123,13 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: Platform.OS === 'ios' ? '500' : 'normal',
         fontSize: 15,
-        color: '#6A6A6A',
+        color: colors.label,
     },
     input: {
         marginTop: 4,
         width: '100%',
         height: 43,
-        backgroundColor: '#FFF',
+        backgroundColor: colors.white,
         borderRadius: 10,
         paddingHorizontal: 12,
     }

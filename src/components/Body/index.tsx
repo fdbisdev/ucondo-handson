@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, Platform, Pressable, Text, TextInput, View } from 'react-native';
 import styles from './styles';
 import { IBody, IListItem } from '../../utils/types';
-import { SCREEN_HEIGHT } from '../../utils/constants';
+import { SCREEN_HEIGHT, colors } from '../../utils/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactNativeModal from 'react-native-modal';
@@ -132,7 +132,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                                     <FontAwesomeIcon
                                         icon={faTrash}
                                         size={40}
-                                        color='#FF6680'
+                                        color={colors.negativeButton}
                                     />
                                 </View>
                                 <View style={styles.modalText}>
