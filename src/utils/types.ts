@@ -24,3 +24,15 @@ export interface IListItem  {
     type: string;
     acceptLaunch: boolean;
 }
+
+export interface IBillsParams {
+    bills: IListItem[]
+    getBills: () => Promise<void>
+    saveBill: (bill: IListItem) => Promise<void>
+    addBill: (bill: IListItem) => Promise<void>
+    deleteBill: (id: string) => Promise<void>
+}
+
+export interface Props {
+    children: React.ReactNode
+}

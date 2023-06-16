@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { StatusBar } from 'react-native';
 
 import Routes from './src/routes';
+import { BillsProvider } from './src/hooks/bills';
 
 function App(): JSX.Element {
     return (
@@ -15,7 +16,9 @@ function App(): JSX.Element {
                     translucent
                     backgroundColor={'transparent'}
                 />
-                <Routes />
+                <BillsProvider>
+                    <Routes />
+                </BillsProvider>
             </SafeAreaProvider >
         </GestureHandlerRootView >
     );
