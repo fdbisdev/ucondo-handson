@@ -16,3 +16,11 @@ export interface IHeader {
 export interface IBody {
     searchable?: boolean;
 }
+
+export interface IListItem  {
+    id: number;
+    code: number;
+    title: string;
+    type: string;
+    acceptLaunch: boolean;
+}
