@@ -27,10 +27,6 @@ const styles = StyleSheet.create({
     backButton: {
         marginRight: 18,
     },
-    searchContainer: {
-        height: 40,
-        backgroundColor: '#fff',
-    }
 });
 
 export default styles;

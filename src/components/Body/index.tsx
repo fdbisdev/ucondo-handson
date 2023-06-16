@@ -9,7 +9,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         <View style={[
             styles.container,
             {
-                marginTop: searchable ? SCREEN_HEIGHT * 0.18 : SCREEN_HEIGHT * 0.12,
+                marginTop: searchable ? SCREEN_HEIGHT * 0.04 : SCREEN_HEIGHT * 0.12,
             }]}>
         </View>
     )
