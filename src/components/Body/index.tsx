@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, Platform, Pressable, Text, TextInput, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { ActivityIndicator, FlatList, Platform, Pressable, Text, TextInput, View } from 'react-native';
 import styles from './styles';
 import { IBody, IListItem } from '../../utils/types';
 import { SCREEN_HEIGHT, colors } from '../../utils/constants';
@@ -7,27 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactNativeModal from 'react-native-modal';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useBill } from '../../hooks/useBills';
 
-const mockData = [
-    {
-        id: 1,
-        code: 1,
-        title: "Receitas",
-        type: "Receita",
-        acceptLaunch: false,
-    },
-    {
-        id: 2,
-        code: 2,
-        title: "Despesas",
-        type: "Despesa",
-        acceptLaunch: false,
-    }
-]
 
 const formatParentName = (item: IListItem) => {
     return String(item.code + ' - ' + item.title);
 }
+
 const acceptLaunch = [
     {
         label: 'Sim',
@@ -39,56 +25,77 @@ const acceptLaunch = [
     }
 ]
 
-const parents = mockData.map((item) => {
-    return {
-        label: formatParentName(item),
-        value: item.code,
-    }
-})
 
-const types = mockData.map((item) => {
-    return {
-        label: item.type,
-        value: item.type,
-    }
-})
 
 const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [showModal, setShowModal] = React.useState<boolean>(false);
     const [selectedToDelete, setSelectedToDelete] = React.useState<IListItem | null>(null);
     const [launchPicker, setLaunchPicker] = React.useState<boolean>(false);
     const [launch, setLaunch] = React.useState<boolean>(true);
-    const [parent, setParent] = React.useState<any>(mockData[0].code);
+    const [parent, setParent] = React.useState<any>();
     const [parentPicker, setParentPicker] = React.useState<boolean>(false);
     const [typePicker, setTypePicker] = React.useState<boolean>(false);
-    const [type, setType] = React.useState<any>(mockData[0].type);
+    const [type, setType] = React.useState<any>();
+
+    const { bills, loading } = useBill();
 
     const handleDelete = (item: IListItem) => {
         setShowModal(true);
         setSelectedToDelete(item);
     }
 
+    const parents = bills.map((item) => {
+        return {
+            label: formatParentName(item),
+            value: item.code,
+        }
+    })
+
+    const types = bills.map((item) => {
+        return {
+            label: item.type,
+            value: item.type,
+        }
+    })
+
     const renderListElement = (item: IListItem) => {
         return (
             <View style={styles.listElement}>
                 <View style={styles.listElementHeader}>
                     <Text style={[styles.listElementTitle, {
-                        color: item.type === 'Receita' ? '#4CD62B' : '#E28856'
+                        color: item.type === 'Receita' ? colors.recipe : colors.expenses
                     }]}>{item.code}</Text>
                     <Text style={[styles.listElementTitle, {
-                        color: item.type === 'Receita' ? '#4CD62B' : '#E28856'
+                        color: item.type === 'Receita' ? colors.recipe : colors.expenses
                     }]}>-</Text>
                     <Text style={[styles.listElementTitle, {
-                        color: item.type === 'Receita' ? '#4CD62B' : '#E28856'
+                        color: item.type === 'Receita' ? colors.recipe : colors.expenses
                     }]}>{item.title}</Text>
                 </View>
                 <Pressable onPress={() => handleDelete(item)}>
                     <FontAwesomeIcon
                         icon={faTrash}
                         size={20}
-                        color='#C4C4D1'
+                        color={colors.icon}
                     />
                 </Pressable>
+            </View>
+        )
+    }
+
+    if (loading) {
+        return (
+            <View style={[styles.container,
+            {
+                marginTop: searchable ? SCREEN_HEIGHT * 0.04 : SCREEN_HEIGHT * 0.12,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }
+            ]}>
+                <ActivityIndicator
+                    size='large'
+                    color={colors.primary}
+                />
             </View>
         )
     }
@@ -108,11 +115,11 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             <Text style={styles.listHeaderTitle}>
                                 Listagem
                             </Text>
-                            <Text style={styles.listHeaderRegisters}>{mockData.length} registros</Text>
+                            <Text style={styles.listHeaderRegisters}>{bills.length} registros</Text>
                         </View>
 
                         <FlatList
-                            data={mockData}
+                            data={bills}
                             renderItem={({ item }) => renderListElement(item)}
                             keyExtractor={(item) => item.id.toString()}
                         />
@@ -186,13 +193,13 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             setValue={setParent}
                             items={parents}
                             listItemLabelStyle={{
-                                color: '#777777',
+                                color: colors.placeholder,
                             }}
                             labelStyle={{
-                                color: '#777777',
+                                color: colors.placeholder,
                             }}
                             dropDownContainerStyle={{
-                                borderColor: '#E6E6F0',
+                                borderColor: colors.border,
                             }}
                         />
                         <Text
@@ -202,7 +209,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                         </Text>
                         <TextInput
                             placeholder='Código da conta'
-                            placeholderTextColor={'#777777'}
+                            placeholderTextColor={colors.placeholder}
                             style={styles.input}
                         />
                         <Text
@@ -212,7 +219,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                         </Text>
                         <TextInput
                             placeholder='Nome da conta'
-                            placeholderTextColor={'#777777'}
+                            placeholderTextColor={colors.placeholder}
                             style={styles.input}
                         />
                         <Text
@@ -230,14 +237,14 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             setValue={setType}
                             items={types}
                             listItemLabelStyle={{
-                                color: '#777777',
+                                color: colors.placeholder,
                             }}
                             labelStyle={{
-                                color: '#777777',
+                                color: colors.placeholder,
                             }}
                             bottomOffset={100}
                             dropDownContainerStyle={{
-                                borderColor: '#E6E6F0',
+                                borderColor: colors.border,
                             }}
                         />
                         <Text
@@ -252,13 +259,13 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             setValue={setLaunch}
                             items={acceptLaunch}
                             listItemLabelStyle={{
-                                color: '#777777',
+                                color: colors.placeholder,
                             }}
                             labelStyle={{
-                                color: '#777777',
+                                color: colors.placeholder,
                             }}
                             dropDownContainerStyle={{
-                                borderColor: '#E6E6F0',
+                                borderColor: colors.border,
                             }}
                         />
                     </View>

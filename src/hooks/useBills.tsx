@@ -1,4 +1,4 @@
-import React, { ChildContextProvider, ReactComponentElement, useCallback } from 'react';
+import React, { ChildContextProvider, ReactComponentElement, useCallback, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IBillsParams, IListItem, Props } from '../utils/types';
 
@@ -11,6 +11,23 @@ export const useBill = () => {
 
     return context;
 }
+
+const initialState: IListItem[] = [
+    {
+        id: 1,
+        code: 1,
+        title: "Receitas",
+        type: "Receita",
+        acceptLaunch: false,
+    },
+    {
+        id: 2,
+        code: 2,
+        title: "Despesas",
+        type: "Despesa",
+        acceptLaunch: false,
+    }
+]
 
 export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     const [bills, setBills] = React.useState<IListItem[]>([]);
@@ -32,8 +49,14 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         console.log('deleteBill');
     }, []);
 
+    useEffect(() => {
+        setLoading(true)
+        setBills(initialState)
+        setLoading(false)
+    }, [])
+
     return (
-        <BillsContext.Provider value={{ bills, getBills, saveBill, addBill, deleteBill }}>
+        <BillsContext.Provider value={{ bills, getBills, saveBill, addBill, deleteBill, loading }}>
             {children}
         </BillsContext.Provider>
     )

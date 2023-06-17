@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { StatusBar } from 'react-native';
 
 import Routes from './src/routes';
-import { BillsProvider } from './src/hooks/bills';
+import { BillsProvider } from './src/hooks/useBills';
 
 function App(): JSX.Element {
     return (

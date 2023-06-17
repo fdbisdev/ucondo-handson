@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderRadius: 10,
         paddingHorizontal: 12,
-    }
+    }, 
 });
 
 export default styles;

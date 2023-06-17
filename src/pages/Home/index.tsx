@@ -9,6 +9,7 @@ import globalStyles from '../../globals/styles';
 import styles from './styles';
 import Body from '../../components/Body';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { colors } from '../../utils/constants';
 
 const Home: React.FC = () => {
     const navigation = useNavigation<NativeStackNavigationProp<RootParamList>>();
@@ -35,7 +36,7 @@ const Home: React.FC = () => {
                             <FontAwesomeIcon
                                 icon={faSearch}
                                 size={20}
-                                color='#C4C4D1'
+                                color={colors.icon}
                             />
                         </Pressable>
                         <TextInput

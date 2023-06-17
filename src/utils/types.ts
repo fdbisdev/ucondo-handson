@@ -31,6 +31,7 @@ export interface IBillsParams {
     saveBill: (bill: IListItem) => Promise<void>
     addBill: (bill: IListItem) => Promise<void>
     deleteBill: (id: string) => Promise<void>
+    loading: boolean
 }
 
 export interface Props {

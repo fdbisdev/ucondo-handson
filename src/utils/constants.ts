@@ -12,5 +12,9 @@ export const colors = {
     subtitle: '#A0A0B2',
     lightGray: '#6C6C80',
     border: '#E6E6F0',
-    label: '#6A6A6A'
+    label: '#6A6A6A',
+    icon: '#C4C4D1',
+    recipe: '#4CD62B',
+    expenses: '#E28856',
+    placeholder: '#777777'
 }
