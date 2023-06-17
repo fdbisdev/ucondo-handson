@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ActivityIndicator, FlatList, Platform, Pressable, Text, TextInput, View } from 'react-native';
-import styles from './styles';
-import { IBody, IListItem } from '../../utils/types';
-import { SCREEN_HEIGHT, colors } from '../../utils/constants';
+
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactNativeModal from 'react-native-modal';
 import DropDownPicker from 'react-native-dropdown-picker';
+
+import { IBody, IListItem } from '../../utils/types';
+import { SCREEN_HEIGHT, colors } from '../../utils/constants';
 import { useBill } from '../../hooks/useBills';
 
+import styles from './styles';
 
 const formatParentName = (item: IListItem) => {
     return String(item.code + ' - ' + item.title);
@@ -24,8 +26,6 @@ const acceptLaunch = [
         value: false,
     }
 ]
-
-
 
 const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [showModal, setShowModal] = React.useState<boolean>(false);

@@ -1,6 +1,9 @@
-import React, { ChildContextProvider, ReactComponentElement, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { IBillsParams, IListItem, Props } from '../utils/types';
+import { Alert } from 'react-native';
 
 const BillsContext = React.createContext<IBillsParams | null>(null);
 
@@ -34,7 +37,22 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     const [loading, setLoading] = React.useState<boolean>(true);
 
     const getBills = useCallback(async () => {
-        console.log('getBills');
+        setLoading(true);
+        try {
+            const response = await AsyncStorage.getItem('@bills');
+            if (response) {
+                setBills(JSON.parse(response));
+            } else {
+                setBills(initialState);
+            }
+        }
+        catch (error) {
+            Alert.alert('Ooops! Erro ao buscar contas, por favor tente novamente.');
+        }
+        finally {
+            setLoading(false);
+        }
+
     }, []);
 
     const saveBill = useCallback(async (bill: IListItem) => {
@@ -50,9 +68,10 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     }, []);
 
     useEffect(() => {
-        setLoading(true)
-        setBills(initialState)
-        setLoading(false)
+        const prepareData = async () => {
+            await getBills();
+        }
+        prepareData()
     }, [])
 
     return (
