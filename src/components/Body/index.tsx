@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ActivityIndicator, FlatList, Platform, Pressable, Text, TextInput, View } from 'react-native';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -6,15 +6,11 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactNativeModal from 'react-native-modal';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import { IBody, IListItem } from '../../utils/types';
+import { IBody, IListItem, IModal } from '../../utils/types';
 import { SCREEN_HEIGHT, colors } from '../../utils/constants';
 import { useBill } from '../../hooks/useBills';
 
 import styles from './styles';
-
-const formatParentName = (item: IListItem) => {
-    return String(item.code + ' - ' + item.title);
-}
 
 const acceptLaunch = [
     {
@@ -28,28 +24,27 @@ const acceptLaunch = [
 ]
 
 const Body: React.FC<IBody> = ({ searchable }: IBody) => {
-    const [showModal, setShowModal] = React.useState<boolean>(false);
-    const [selectedToDelete, setSelectedToDelete] = React.useState<IListItem | null>(null);
+    const [showModal, setShowModal] = React.useState<IModal>();
     const [launchPicker, setLaunchPicker] = React.useState<boolean>(false);
     const [launch, setLaunch] = React.useState<boolean>(true);
-    const [parent, setParent] = React.useState<any>();
+    const [parent, setParent] = React.useState<any>(0);
     const [parentPicker, setParentPicker] = React.useState<boolean>(false);
+    const [codeInput, setCodeInput] = React.useState<number | undefined>(0);
     const [typePicker, setTypePicker] = React.useState<boolean>(false);
     const [type, setType] = React.useState<any>();
+    const [parentsList, setParentsList] = React.useState<any[]>([]);
 
     const { bills, loading } = useBill();
 
-    const handleDelete = (item: IListItem) => {
-        setShowModal(true);
-        setSelectedToDelete(item);
+    const handleDelete = useCallback((item: IListItem) => {
+        setShowModal({ visible: true, selected: item });
+    }, [])
+
+    const formatParentName = (item: IListItem) => {
+        return String(item.code + ' - ' + item.title);
     }
 
-    const parents = bills.map((item) => {
-        return {
-            label: formatParentName(item),
-            value: item.code,
-        }
-    })
+
 
     const types = bills.map((item) => {
         return {
@@ -58,7 +53,30 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         }
     })
 
-    const renderListElement = (item: IListItem) => {
+    const handleSetCode = useCallback((value: any) => {
+        const code = bills.find((item) => item.code === value);
+        if (code?.code) {
+            setCodeInput((code?.code + (code?.code / 10)) ?? undefined);
+        }
+    }, [])
+
+    useEffect(() => {
+        const parents = bills.map((item) => {
+            if (!item.acceptLaunch) {
+                console.log(item);
+                return {
+                    label: formatParentName(item),
+                    value: item.code,
+                }
+            }
+            else {
+                return
+            }
+        })
+        setParentsList(parents.filter((item) => item !== undefined));
+    }, [bills])
+
+    const renderListElement = useCallback((item: IListItem) => {
         return (
             <View style={styles.listElement}>
                 <View style={styles.listElementHeader}>
@@ -81,7 +99,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                 </Pressable>
             </View>
         )
-    }
+    }, [])
 
     if (loading) {
         return (
@@ -125,7 +143,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                         />
                         <ReactNativeModal
                             style={styles.modal}
-                            isVisible={showModal}
+                            isVisible={showModal?.visible}
                         >
                             <View style={{
                                 flex: 1,
@@ -157,7 +175,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                                                 fontStyle: 'normal',
                                                 alignSelf: 'center',
                                             }
-                                        ]}>{selectedToDelete?.code + ' - ' + selectedToDelete?.title}</Text>
+                                        ]}>{showModal?.selected?.code + ' - ' + showModal?.selected?.title}</Text>
                                         <Text style={styles.modalTitle}> ?</Text>
                                     </View>
                                 </View>
@@ -166,7 +184,10 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                                 >
                                     <Pressable
                                         style={styles.cancelButtonContainer}
-                                        onPress={() => setShowModal(false)}>
+                                        onPress={() => setShowModal({
+                                            visible: false,
+                                            selected: null,
+                                        })}>
                                         <Text style={styles.cancelButton}>Nao!</Text>
                                     </Pressable>
                                     <Pressable
@@ -191,7 +212,8 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder="Selecione"
                             value={parent}
                             setValue={setParent}
-                            items={parents}
+                            onChangeValue={(value) => handleSetCode(value)}
+                            items={parentsList}
                             listItemLabelStyle={{
                                 color: colors.placeholder,
                             }}
@@ -211,6 +233,8 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder='Código da conta'
                             placeholderTextColor={colors.placeholder}
                             style={styles.input}
+                            value={codeInput ? String(codeInput) : ''}
+                            onChangeText={(value) => setCodeInput(Number(value))}
                         />
                         <Text
                             style={styles.label}

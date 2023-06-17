@@ -29,6 +29,13 @@ const initialState: IListItem[] = [
         title: "Despesas",
         type: "Despesa",
         acceptLaunch: false,
+    },
+    {
+        id: 3,
+        code: 1.1,
+        title: "Taxa condominial",
+        type: "Receita",
+        acceptLaunch: true,
     }
 ]
 

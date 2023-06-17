@@ -10,7 +10,6 @@ export interface IHeader {
     rightIcon: IconProp;
     leftIcon?: IconProp;
     pressableFunction: () => void;
-    
 }
 
 export interface IBody {
@@ -37,3 +36,9 @@ export interface IBillsParams {
 export interface Props {
     children: React.ReactNode
 }
+
+export interface IModal {
+    visible: boolean;
+    selected: IListItem | null; 
+}
+
