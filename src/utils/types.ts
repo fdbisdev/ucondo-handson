@@ -18,7 +18,7 @@ export interface IBody {
 
 export interface IListItem  {
     id: number;
-    code: number;
+    code: string;
     title: string;
     type: string;
     acceptLaunch: boolean;
@@ -29,8 +29,10 @@ export interface IBillsParams {
     getBills: () => Promise<void>
     saveBill: (bill: IListItem) => Promise<void>
     addBill: (bill: IListItem) => Promise<void>
-    deleteBill: (id: string) => Promise<void>
+    deleteBill: (item: IListItem | null) => Promise<void>
     loading: boolean
+    modalVisibility: boolean
+    setModalVisibility: (value: boolean) => void
 }
 
 export interface Props {

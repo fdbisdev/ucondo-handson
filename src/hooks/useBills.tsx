@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { IBillsParams, IListItem, Props } from '../utils/types';
 import { Alert } from 'react-native';
+import { initialState } from '../utils/constants';
 
 const BillsContext = React.createContext<IBillsParams | null>(null);
 
@@ -15,38 +16,17 @@ export const useBill = () => {
     return context;
 }
 
-const initialState: IListItem[] = [
-    {
-        id: 1,
-        code: 1,
-        title: "Receitas",
-        type: "Receita",
-        acceptLaunch: false,
-    },
-    {
-        id: 2,
-        code: 2,
-        title: "Despesas",
-        type: "Despesa",
-        acceptLaunch: false,
-    },
-    {
-        id: 3,
-        code: 1.1,
-        title: "Taxa condominial",
-        type: "Receita",
-        acceptLaunch: true,
-    }
-]
-
 export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     const [bills, setBills] = React.useState<IListItem[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
+    const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
 
     const getBills = useCallback(async () => {
         setLoading(true);
+        console.log('getBills');
         try {
             const response = await AsyncStorage.getItem('@bills');
+            console.log('response', response);
             if (response) {
                 setBills(JSON.parse(response));
             } else {
@@ -70,8 +50,24 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         console.log('addBill');
     }, []);
 
-    const deleteBill = useCallback(async (id: string) => {
-        console.log('deleteBill');
+    const deleteBill = useCallback(async (item: IListItem | null) => {
+        if (!item) return;
+        setLoading(true);
+        setModalVisibility(false);
+        const newBills = bills.filter((bill) => bill.id !== item.id);
+        console.log('new', newBills);
+        try {
+            await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
+            await getBills();
+
+            Alert.alert('Conta deletada com sucesso!');
+        }
+        catch (error) {
+            Alert.alert('Ooops! Erro ao deletar conta, por favor tente novamente.');
+        }
+        finally {
+            setLoading(false);
+        }
     }, []);
 
     useEffect(() => {
@@ -82,7 +78,7 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     }, [])
 
     return (
-        <BillsContext.Provider value={{ bills, getBills, saveBill, addBill, deleteBill, loading }}>
+        <BillsContext.Provider value={{ bills, getBills, saveBill, addBill, deleteBill, loading, modalVisibility, setModalVisibility }}>
             {children}
         </BillsContext.Provider>
     )

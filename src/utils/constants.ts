@@ -1,4 +1,5 @@
 import { Dimensions, NativeModules } from "react-native";
+import { IListItem } from "./types";
 
 export const SCREEN_HEIGHT = Dimensions.get('window').height;
 export const { StatusBarManager } = NativeModules;
@@ -18,3 +19,49 @@ export const colors = {
     expenses: '#E28856',
     placeholder: '#777777'
 }
+
+export const acceptLaunch = [
+    {
+        label: 'Sim',
+        value: true,
+    },
+    {
+        label: 'Não',
+        value: false,
+    }
+]
+
+export const types = [
+    {
+        label: 'Receita',
+        value: 'Receita',
+    },
+    {
+        label: 'Despesa',
+        value: 'Despesa',
+    }
+]
+
+export const initialState: IListItem[] = [
+    {
+        id: 1,
+        code: 1,
+        title: "Receitas",
+        type: "Receita",
+        acceptLaunch: false,
+    },
+    {
+        id: 2,
+        code: 2,
+        title: "Despesas",
+        type: "Despesa",
+        acceptLaunch: false,
+    },
+    {
+        id: 3,
+        code: 1.1,
+        title: "Taxa condominial",
+        type: "Receita",
+        acceptLaunch: true,
+    }
+]

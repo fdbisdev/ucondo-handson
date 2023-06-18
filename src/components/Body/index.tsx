@@ -6,25 +6,14 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactNativeModal from 'react-native-modal';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import { IBody, IListItem, IModal } from '../../utils/types';
-import { SCREEN_HEIGHT, colors } from '../../utils/constants';
+import { IBody, IListItem } from '../../utils/types';
+import { SCREEN_HEIGHT, acceptLaunch, colors, types } from '../../utils/constants';
 import { useBill } from '../../hooks/useBills';
 
 import styles from './styles';
-
-const acceptLaunch = [
-    {
-        label: 'Sim',
-        value: true,
-    },
-    {
-        label: 'Não',
-        value: false,
-    }
-]
+import { orderByCode } from '../../utils/functions';
 
 const Body: React.FC<IBody> = ({ searchable }: IBody) => {
-    const [showModal, setShowModal] = React.useState<IModal>();
     const [launchPicker, setLaunchPicker] = React.useState<boolean>(false);
     const [launch, setLaunch] = React.useState<boolean>(true);
     const [parent, setParent] = React.useState<any>(0);
@@ -33,37 +22,36 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [typePicker, setTypePicker] = React.useState<boolean>(false);
     const [type, setType] = React.useState<any>();
     const [parentsList, setParentsList] = React.useState<any[]>([]);
+    const [filteredList, setFilteredList] = React.useState<IListItem[]>([]);
+    const [selectedToDelete, setSelectedToDelete] = React.useState<IListItem | null>(null);
 
-    const { bills, loading } = useBill();
+    const { bills, loading, deleteBill, modalVisibility, setModalVisibility } = useBill();
 
     const handleDelete = useCallback((item: IListItem) => {
-        setShowModal({ visible: true, selected: item });
+        setModalVisibility(true);
+        setSelectedToDelete(item);
     }, [])
+
+    const handleConfirmDelete = () => {
+        console.log(selectedToDelete)
+        deleteBill(selectedToDelete);
+    }
 
     const formatParentName = (item: IListItem) => {
         return String(item.code + ' - ' + item.title);
     }
 
-
-
-    const types = bills.map((item) => {
-        return {
-            label: item.type,
-            value: item.type,
-        }
-    })
-
     const handleSetCode = useCallback((value: any) => {
         const code = bills.find((item) => item.code === value);
         if (code?.code) {
-            setCodeInput((code?.code + (code?.code / 10)) ?? undefined);
+            setCodeInput((Number(code?.code) + Number(Number(code?.code) / 10)) ?? undefined);
         }
     }, [])
 
     useEffect(() => {
+        console.log('selected', selectedToDelete)
         const parents = bills.map((item) => {
             if (!item.acceptLaunch) {
-                console.log(item);
                 return {
                     label: formatParentName(item),
                     value: item.code,
@@ -73,10 +61,11 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                 return
             }
         })
+        setFilteredList(bills.sort(orderByCode))
         setParentsList(parents.filter((item) => item !== undefined));
-    }, [bills])
+    }, [bills, selectedToDelete])
 
-    const renderListElement = useCallback((item: IListItem) => {
+    const renderListElement = (item: IListItem) => {
         return (
             <View style={styles.listElement}>
                 <View style={styles.listElementHeader}>
@@ -99,7 +88,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                 </Pressable>
             </View>
         )
-    }, [])
+    }
 
     if (loading) {
         return (
@@ -137,13 +126,13 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                         </View>
 
                         <FlatList
-                            data={bills}
+                            data={filteredList}
                             renderItem={({ item }) => renderListElement(item)}
                             keyExtractor={(item) => item.id.toString()}
                         />
                         <ReactNativeModal
                             style={styles.modal}
-                            isVisible={showModal?.visible}
+                            isVisible={modalVisibility}
                         >
                             <View style={{
                                 flex: 1,
@@ -175,7 +164,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                                                 fontStyle: 'normal',
                                                 alignSelf: 'center',
                                             }
-                                        ]}>{showModal?.selected?.code + ' - ' + showModal?.selected?.title}</Text>
+                                        ]}>{selectedToDelete?.code + ' - ' + selectedToDelete?.title}</Text>
                                         <Text style={styles.modalTitle}> ?</Text>
                                     </View>
                                 </View>
@@ -184,20 +173,19 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                                 >
                                     <Pressable
                                         style={styles.cancelButtonContainer}
-                                        onPress={() => setShowModal({
-                                            visible: false,
-                                            selected: null,
-                                        })}>
+                                        onPress={() => setModalVisibility(false)}>
                                         <Text style={styles.cancelButton}>Nao!</Text>
                                     </Pressable>
                                     <Pressable
+                                        onPress={() => handleConfirmDelete()}
                                         style={styles.confirmButtonContainer}
                                     >
                                         <Text style={styles.confirmButton}>Com certeza!</Text>
                                     </Pressable>
                                 </View>
                             </View>
-                        </ReactNativeModal></>
+                        </ReactNativeModal>
+                    </>
                 ) : (
                     <View
                         style={styles.listHeaderAdded}
