@@ -1,17 +1,14 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import React, { useEffect } from 'react';
-import { Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native';
+import React from 'react';
+import { Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { RootParamList } from '../../utils/types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import globalStyles from '../../globals/styles';
 import Body from '../../components/Body';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './styles';
 import Header from '../../components/Header';
 
 const Details: React.FC<NativeStackScreenProps<RootParamList, 'Details'>> = ({ route }: NativeStackScreenProps<RootParamList, 'Details'>) => {
-    const navigation = useNavigation();
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -19,10 +16,12 @@ const Details: React.FC<NativeStackScreenProps<RootParamList, 'Details'>> = ({ r
                 style={globalStyles.container}
             >
                 <Header
-                    title='Plano de Contas'
+                    title='Detalhes da Conta'
                     leftIcon={faChevronLeft}
                 />
-                <Body />
+                <Body
+                    details={route.params.item}
+                />
             </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
     )

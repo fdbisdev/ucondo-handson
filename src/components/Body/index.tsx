@@ -15,7 +15,7 @@ import { orderByCode } from '../../utils/functions';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-const Body: React.FC<IBody> = ({ searchable }: IBody) => {
+const Body: React.FC<IBody> = ({ searchable, details }: IBody) => {
     const [launchPicker, setLaunchPicker] = React.useState<boolean>(false);
     const [launch, setLaunch] = React.useState<boolean>(true);
     const [parent, setParent] = React.useState<any>(0);
@@ -111,6 +111,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         setNewBill({
             ...newBill,
             code: newCode,
+            parent: parent
         })
     }
 
@@ -214,6 +215,27 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                     size='large'
                     color={colors.primary}
                 />
+            </View>
+        )
+    }
+
+    if (details) {
+        return (
+            <View style={[
+                styles.container,
+                {
+                    marginTop: searchable ? SCREEN_HEIGHT * 0.04 : SCREEN_HEIGHT * 0.12,
+                }]}>
+                <View
+                    style={styles.listHeaderAdded}
+                >
+                    <Text
+                        style={styles.label}
+                    >
+                        Conta pai
+                    </Text>
+                    <Text>{ }</Text>
+                </View>
             </View>
         )
     }

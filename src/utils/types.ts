@@ -16,6 +16,7 @@ export interface IHeader {
 
 export interface IBody {
     searchable?: boolean;
+    details?: IListItem;
 }
 
 export interface IListItem  {
@@ -24,6 +25,7 @@ export interface IListItem  {
     title: string;
     type: string;
     acceptLaunch: boolean;
+    parent: string;
 }
 
 export interface IBillsParams {

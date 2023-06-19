@@ -35,7 +35,7 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         setLoading(false);
     }, [bills]);
 
-    const getBills = useCallback(async () => {
+    const getBills = async () => {
         setLoading(true);
         try {
             const response = await AsyncStorage.getItem('@bills');
@@ -53,10 +53,11 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             setLoading(false);
         }
 
-    }, []);
+    }
 
     const saveBill = async (bill: IListItem) => {
         setLoading(true);
+        console.log('bill', bill);
         let handleError = '';
 
         if (Object.keys(bill).length === 0) {
@@ -96,6 +97,7 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
                     type: bill.type,
                     code: bill.code,
                     acceptLaunch: bill.acceptLaunch ?? true,
+                    parent: bill.parent ?? null,
                 }
 
                 const newBills = [...billsParsed, newBillData];
@@ -125,7 +127,15 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         if (!item) return;
         setLoading(true);
         setModalVisibility(false);
-        const newBills = bills.filter((bill) => bill.id !== item.id);
+
+        const billsStoraged = await AsyncStorage.getItem('@bills');
+
+        if (!billsStoraged) return;
+
+        const billsParsed: IListItem[] = JSON.parse(billsStoraged);
+
+        const newBills = billsParsed.filter((bill) => bill.id !== item.id);
+
         try {
             await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
             await getBills();
