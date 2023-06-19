@@ -238,7 +238,7 @@ const Body: React.FC<IBody> = ({ searchable, details }: IBody) => {
                     marginTop: searchable ? SCREEN_HEIGHT * 0.04 : SCREEN_HEIGHT * 0.12,
                 }]}>
                 <View
-                    style={styles.listHeaderAdded}
+                    style={styles.listHeaderDetails}
                 >
                     <View>
                         <Text
