@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { ActivityIndicator, FlatList, Platform, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, FlatList, Platform, Pressable, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -95,26 +95,28 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
 
     const renderListElement = (item: IListItem) => {
         return (
-            <View style={styles.listElement}>
-                <View style={styles.listElementHeader}>
-                    <Text style={[styles.listElementTitle, {
-                        color: item.type === 'Receita' ? colors.recipe : colors.expenses
-                    }]}>{item.code}</Text>
-                    <Text style={[styles.listElementTitle, {
-                        color: item.type === 'Receita' ? colors.recipe : colors.expenses
-                    }]}>-</Text>
-                    <Text style={[styles.listElementTitle, {
-                        color: item.type === 'Receita' ? colors.recipe : colors.expenses
-                    }]}>{item.title}</Text>
+            <TouchableWithoutFeedback>
+                <View style={styles.listElement}>
+                    <View style={styles.listElementHeader}>
+                        <Text style={[styles.listElementTitle, {
+                            color: item.type === 'Receita' ? colors.recipe : colors.expenses
+                        }]}>{item.code}</Text>
+                        <Text style={[styles.listElementTitle, {
+                            color: item.type === 'Receita' ? colors.recipe : colors.expenses
+                        }]}>-</Text>
+                        <Text style={[styles.listElementTitle, {
+                            color: item.type === 'Receita' ? colors.recipe : colors.expenses
+                        }]}>{item.title}</Text>
+                    </View>
+                    <Pressable onPress={() => handleDelete(item)}>
+                        <FontAwesomeIcon
+                            icon={faTrash}
+                            size={20}
+                            color={colors.icon}
+                        />
+                    </Pressable>
                 </View>
-                <Pressable onPress={() => handleDelete(item)}>
-                    <FontAwesomeIcon
-                        icon={faTrash}
-                        size={20}
-                        color={colors.icon}
-                    />
-                </Pressable>
-            </View>
+            </TouchableWithoutFeedback>
         )
     }
 
@@ -143,7 +145,9 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
             }]}>
             {
                 searchable ? (
-                    <>
+                    <View style={{
+                        flex: 1,
+                    }}>
                         <View
                             style={styles.listHeader}
                         >
@@ -154,6 +158,14 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                         </View>
 
                         <FlatList
+                            style={{
+                                flex: 1,
+                                zIndex: 1,
+                            }}
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                paddingBottom: 30,
+                            }}
                             data={filtedList}
                             renderItem={({ item }) => renderListElement(item)}
                             keyExtractor={(item) => item.id.toString()}
@@ -213,7 +225,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                                 </View>
                             </View>
                         </ReactNativeModal>
-                    </>
+                    </View>
                 ) : (
                     <View
                         style={styles.listHeaderAdded}
