@@ -41,27 +41,3 @@ export const types = [
         value: 'Despesa',
     }
 ]
-
-export const initialState: IListItem[] = [
-    {
-        id: 1,
-        code: '1',
-        title: "Receitas",
-        type: "Receita",
-        acceptLaunch: false,
-    },
-    {
-        id: 2,
-        code:'2',
-        title: "Despesas",
-        type: "Despesa",
-        acceptLaunch: false,
-    },
-    {
-        id: 3,
-        code: '1.1',
-        title: "Taxa condominial",
-        type: "Receita",
-        acceptLaunch: true,
-    }
-]

@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { IBillsParams, IListItem, Props } from '../utils/types';
 import { Alert } from 'react-native';
-import { initialState } from '../utils/constants';
 
 const BillsContext = React.createContext<IBillsParams | null>(null);
 
@@ -31,9 +30,8 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             if (response) {
                 setBills(JSON.parse(response));
             }
-            //TODO - remove this else and set bills to empty array
             else {
-                setBills(initialState);
+                setBills([]);
             }
         }
         catch (error) {
