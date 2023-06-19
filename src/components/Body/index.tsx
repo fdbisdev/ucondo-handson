@@ -157,6 +157,18 @@ const Body: React.FC<IBody> = ({ searchable, details }: IBody) => {
         })
     }
 
+    const findParent = (code: string) => {
+        console.log('code', code);
+        if (!code) return 'Nenhum'
+        const parent = bills.filter((item) => {
+            if (item.code === code) {
+                return item
+            }
+        })
+
+        return parent && formatParentName(parent[0])
+    }
+
     useEffect(() => {
         const parents = bills.map((item) => {
             if (!item.acceptLaunch) {
@@ -229,12 +241,56 @@ const Body: React.FC<IBody> = ({ searchable, details }: IBody) => {
                 <View
                     style={styles.listHeaderAdded}
                 >
-                    <Text
-                        style={styles.label}
-                    >
-                        Conta pai
-                    </Text>
-                    <Text>{ }</Text>
+                    <View>
+                        <Text
+                            style={styles.detailsTextTitle}
+                        >
+                            Conta pai
+                        </Text>
+                        <Text
+                            style={styles.detailsText}
+                        >{findParent(details.parent)}</Text>
+                    </View>
+                    <View>
+                        <Text
+                            style={styles.detailsTextTitle}
+                        >
+                            Código
+                        </Text>
+                        <Text
+                            style={styles.detailsText}
+                        >{details.code}</Text>
+                    </View>
+                    <View>
+                        <Text
+                            style={styles.detailsTextTitle}
+                        >
+                            Nome
+                        </Text>
+                        <Text
+                            style={styles.detailsText}
+                        >{details.title}</Text>
+                    </View>
+                    <View>
+                        <Text
+                            style={styles.detailsTextTitle}
+                        >
+                            Tipo
+                        </Text>
+                        <Text
+                            style={styles.detailsText}
+                        >{details.type}</Text>
+                    </View>
+                    <View>
+                        <Text
+                            style={styles.detailsTextTitle}
+                        >
+                            Aceita lançamentos
+                        </Text>
+                        <Text
+                            style={styles.detailsText}
+                        >{details.acceptLaunch ? 'Sim' : 'Não'}</Text>
+                    </View>
                 </View>
             </View>
         )

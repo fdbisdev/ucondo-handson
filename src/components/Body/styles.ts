@@ -135,6 +135,22 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         color: colors.placeholder,
     }, 
+    detailsTextTitle: {
+        marginTop: 4,
+        fontStyle: 'normal',
+        fontWeight: Platform.OS === 'ios' ? '500' : 'normal',
+        fontSize: 16,
+        color: colors.title,
+    },
+    detailsText: {
+        marginTop: 4,
+        marginLeft: 12,
+        fontStyle: 'normal',
+        fontWeight: Platform.OS === 'ios' ? '400' : 'normal',
+        fontSize: 15,
+        color: colors.label,
+        marginBottom: 12,
+    }
 });
 
 export default styles;
