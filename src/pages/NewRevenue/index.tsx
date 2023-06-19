@@ -1,13 +1,16 @@
 import React, { useCallback } from 'react';
-import Header from '../../components/Header';
+import { Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
 import { faChevronLeft, faCheck } from '@fortawesome/free-solid-svg-icons';
-import Body from '../../components/Body';
-import { Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback, View } from 'react-native';
-import styles from '../../globals/styles';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import { IListItem, RootParamList } from '../../utils/types';
 import { useBill } from '../../hooks/useBills';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Header from '../../components/Header';
+import Body from '../../components/Body';
+
+import styles from '../../globals/styles';
 
 const NewRevenue: React.FC = () => {
     const { saveBill, newBill } = useBill();

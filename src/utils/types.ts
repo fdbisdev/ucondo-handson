@@ -28,7 +28,6 @@ export interface IBillsParams {
     bills: IListItem[]
     getBills: () => Promise<void>
     saveBill: (bill: IListItem) => Promise<void>
-    addBill: (bill: IListItem) => Promise<void>
     deleteBill: (item: IListItem | null) => Promise<void>
     loading: boolean
     modalVisibility: boolean

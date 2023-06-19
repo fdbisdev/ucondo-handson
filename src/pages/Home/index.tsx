@@ -1,16 +1,20 @@
 import React from 'react';
 import { Keyboard, KeyboardAvoidingView, Pressable, TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import Header from '../../components/Header';
+
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';
-import { RootParamList } from '../../utils/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import globalStyles from '../../globals/styles';
-import styles from './styles';
-import Body from '../../components/Body';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+
 import { colors } from '../../utils/constants';
 import { useBill } from '../../hooks/useBills';
+import { RootParamList } from '../../utils/types';
+import Header from '../../components/Header';
+import globalStyles from '../../globals/styles';
+import Body from '../../components/Body';
+
+import styles from './styles';
 
 const Home: React.FC = () => {
     const [searchItem, setSearchItem] = React.useState<string | null>(null);

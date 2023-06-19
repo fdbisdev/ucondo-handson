@@ -96,10 +96,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         }
     }, []);
 
-    const addBill = useCallback(async (bill: IListItem) => {
-        console.log('addBill');
-    }, []);
-
     const deleteBill = useCallback(async (item: IListItem | null) => {
         if (!item) return;
         setLoading(true);
@@ -131,7 +127,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             bills,
             getBills,
             saveBill,
-            addBill,
             deleteBill,
             loading,
             modalVisibility,
