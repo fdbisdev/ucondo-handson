@@ -36,10 +36,8 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
 
     const getBills = useCallback(async () => {
         setLoading(true);
-        console.log('getBills');
         try {
             const response = await AsyncStorage.getItem('@bills');
-            console.log('response', response);
             if (response) {
                 setBills(JSON.parse(response));
             }
@@ -57,7 +55,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     }, []);
 
     const saveBill = useCallback(async (bill: IListItem) => {
-        console.log('newBill', bill);
         setLoading(true);
 
         const billsStoraged = await AsyncStorage.getItem('@bills');
@@ -65,7 +62,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         let maxId = 0;
 
         if (billsStoraged) {
-            console.log('billsStoraged', billsStoraged);
             const billsParsed: IListItem[] = JSON.parse(billsStoraged);
 
             if (billsParsed.length === 0) {
@@ -84,7 +80,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             }
 
             const newBills = [...billsParsed, newBillData];
-            console.log('newBills', newBills);
             try {
                 await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
                 await getBills();
@@ -110,7 +105,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         setLoading(true);
         setModalVisibility(false);
         const newBills = bills.filter((bill) => bill.id !== item.id);
-        console.log('new', newBills);
         try {
             await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
             await getBills();

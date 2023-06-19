@@ -78,7 +78,6 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     }
 
     useEffect(() => {
-        console.log('selected', selectedToDelete)
         const parents = bills.map((item) => {
             if (!item.acceptLaunch) {
                 return {
