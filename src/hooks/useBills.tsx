@@ -100,6 +100,7 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         else {
             Alert.alert(error);
             setLoading(false);
+            setError('');
         }
     }, []);
 

@@ -34,6 +34,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         filtedList,
         setFiltedList,
         setError,
+        error
     } = useBill();
 
     const handleDelete = useCallback((item: IListItem) => {
@@ -102,12 +103,23 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     }
 
     const handleChangeCode = (value: any) => {
+        console.log('value: ', value)
+        value.split('.').map((item: string) => {
+            console.log('item: ', item)
+            if (Number(item) > 999) {
+                setError('Código inválido')
+            }
+        })
+
         bills.map((item) => {
             if (item.code === value) {
                 console.log('item.code: ', item.code)
-                setError('Código já existente')
+                if (error !== '') {
+                    setError('Código já existente')
+                }
             }
         })
+
         setNewBill({
             ...newBill,
             code: value,
