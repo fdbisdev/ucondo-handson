@@ -10,8 +10,12 @@ import styles from './styles';
 import Body from '../../components/Body';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { colors } from '../../utils/constants';
+import { useBill } from '../../hooks/useBills';
 
 const Home: React.FC = () => {
+    const [searchItem, setSearchItem] = React.useState<string | null>(null);
+    const { handleSearch } = useBill()
+
     const navigation = useNavigation<NativeStackNavigationProp<RootParamList>>();
 
     return (
@@ -32,6 +36,7 @@ const Home: React.FC = () => {
                     >
                         <Pressable
                             style={styles.searchIcon}
+                            onPress={() => handleSearch(searchItem ?? '')}
                         >
                             <FontAwesomeIcon
                                 icon={faSearch}
@@ -41,6 +46,8 @@ const Home: React.FC = () => {
                         </Pressable>
                         <TextInput
                             placeholder='Pesquisar conta'
+                            value={searchItem || ''}
+                            onChangeText={setSearchItem}
                         />
                     </View>
                 </View>

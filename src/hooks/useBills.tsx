@@ -20,6 +20,19 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
     const [newBill, setNewBill] = React.useState<IListItem>({} as IListItem);
+    const [filtedList, setFiltedList] = React.useState<IListItem[]>([]);
+
+    const handleSearch = useCallback(async (search: string) => {
+        setLoading(true);
+        if (search === '') {
+            setFiltedList(bills);
+        }
+        else {
+            const filtered = bills.filter((bill) => bill.title.toLowerCase().includes(search.toLowerCase()));
+            setFiltedList(filtered);
+        }
+        setLoading(false);
+    }, [bills]);
 
     const getBills = useCallback(async () => {
         setLoading(true);
@@ -130,7 +143,10 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             modalVisibility,
             setModalVisibility,
             newBill,
-            setNewBill
+            setNewBill,
+            filtedList,
+            setFiltedList,
+            handleSearch,
         }}>
             {children}
         </BillsContext.Provider>

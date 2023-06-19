@@ -35,6 +35,9 @@ export interface IBillsParams {
     setModalVisibility: (value: boolean) => void
     newBill: IListItem
     setNewBill: (value: IListItem) => void
+    filtedList: IListItem[]
+    setFiltedList: (value: IListItem[]) => void
+    handleSearch: (value: string) => void
 }
 
 export interface Props {

@@ -21,10 +21,9 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [typePicker, setTypePicker] = React.useState<boolean>(false);
     const [type, setType] = React.useState<any>();
     const [parentsList, setParentsList] = React.useState<any[]>([]);
-    const [filteredList, setFilteredList] = React.useState<IListItem[]>([]);
     const [selectedToDelete, setSelectedToDelete] = React.useState<IListItem | null>(null);
 
-    const { bills, loading, deleteBill, modalVisibility, setModalVisibility, setNewBill, newBill } = useBill();
+    const { bills, loading, deleteBill, modalVisibility, setModalVisibility, setNewBill, newBill, filtedList, setFiltedList } = useBill();
 
     const handleDelete = useCallback((item: IListItem) => {
         setModalVisibility(true);
@@ -91,7 +90,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                 return
             }
         })
-        setFilteredList(bills.sort(orderByCode))
+        setFiltedList(bills.sort(orderByCode))
         setParentsList([{ label: 'Nenhum', value: 0 }, ...parents.filter((item) => item !== undefined)]);
     }, [bills, selectedToDelete])
 
@@ -156,7 +155,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                         </View>
 
                         <FlatList
-                            data={filteredList}
+                            data={filtedList}
                             renderItem={({ item }) => renderListElement(item)}
                             keyExtractor={(item) => item.id.toString()}
                         />
