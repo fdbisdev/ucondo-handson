@@ -18,14 +18,13 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [launch, setLaunch] = React.useState<boolean>(true);
     const [parent, setParent] = React.useState<any>(0);
     const [parentPicker, setParentPicker] = React.useState<boolean>(false);
-    const [codeInput, setCodeInput] = React.useState<number | undefined>(0);
     const [typePicker, setTypePicker] = React.useState<boolean>(false);
     const [type, setType] = React.useState<any>();
     const [parentsList, setParentsList] = React.useState<any[]>([]);
     const [filteredList, setFilteredList] = React.useState<IListItem[]>([]);
     const [selectedToDelete, setSelectedToDelete] = React.useState<IListItem | null>(null);
 
-    const { bills, loading, deleteBill, modalVisibility, setModalVisibility } = useBill();
+    const { bills, loading, deleteBill, modalVisibility, setModalVisibility, setNewBill, newBill } = useBill();
 
     const handleDelete = useCallback((item: IListItem) => {
         setModalVisibility(true);
@@ -44,9 +43,40 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const handleSetCode = useCallback((value: any) => {
         const code = bills.find((item) => item.code === value);
         if (code?.code) {
-            setCodeInput((Number(code?.code) + Number(Number(code?.code) / 10)) ?? undefined);
+            setNewBill({
+                ...newBill,
+                code: code.code + 1,
+            });
         }
     }, [])
+
+    const handleChangeCode = (value: any) => {
+        setNewBill({
+            ...newBill,
+            code: value,
+        })
+    }
+
+    const handleChangeName = (value: any) => {
+        setNewBill({
+            ...newBill,
+            title: value,
+        })
+    }
+
+    const handleChangeType = (value: any) => {
+        setNewBill({
+            ...newBill,
+            type: value,
+        })
+    }
+
+    const handleChangeLaunchs = (value: any) => {
+        setNewBill({
+            ...newBill,
+            acceptLaunch: value,
+        })
+    }
 
     useEffect(() => {
         console.log('selected', selectedToDelete)
@@ -200,8 +230,10 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder="Selecione"
                             value={parent}
                             setValue={setParent}
-                            onChangeValue={(value) => handleSetCode(value)}
                             items={parentsList}
+                            placeholderStyle={{
+                                color: colors.placeholder,
+                            }}
                             listItemLabelStyle={{
                                 color: colors.placeholder,
                             }}
@@ -221,8 +253,8 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder='Código da conta'
                             placeholderTextColor={colors.placeholder}
                             style={styles.input}
-                            value={codeInput ? String(codeInput) : ''}
-                            onChangeText={(value) => setCodeInput(Number(value))}
+                            value={newBill.code ? String(newBill.code) : ''}
+                            onChangeText={(value) => handleChangeCode(value)}
                         />
                         <Text
                             style={styles.label}
@@ -233,6 +265,8 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder='Nome da conta'
                             placeholderTextColor={colors.placeholder}
                             style={styles.input}
+                            value={newBill.title}
+                            onChangeText={(value) => handleChangeName(value)}
                         />
                         <Text
                             style={styles.label}
@@ -247,7 +281,11 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder="Selecione"
                             value={type}
                             setValue={setType}
+                            onChangeValue={(value) => handleChangeType(value)}
                             items={types}
+                            placeholderStyle={{
+                                color: colors.placeholder,
+                            }}
                             listItemLabelStyle={{
                                 color: colors.placeholder,
                             }}
@@ -269,7 +307,11 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder="Selecione"
                             value={launch}
                             setValue={setLaunch}
+                            onChangeValue={(value) => handleChangeLaunchs(value)}
                             items={acceptLaunch}
+                            placeholderStyle={{
+                                color: colors.placeholder,
+                            }}
                             listItemLabelStyle={{
                                 color: colors.placeholder,
                             }}

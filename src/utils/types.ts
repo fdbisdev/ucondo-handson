@@ -9,7 +9,7 @@ export interface IHeader {
     title: string;
     rightIcon: IconProp;
     leftIcon?: IconProp;
-    pressableFunction: () => void;
+    pressableFunction: (item?: IListItem) => void;
 }
 
 export interface IBody {
@@ -33,6 +33,8 @@ export interface IBillsParams {
     loading: boolean
     modalVisibility: boolean
     setModalVisibility: (value: boolean) => void
+    newBill: IListItem
+    setNewBill: (value: IListItem) => void
 }
 
 export interface Props {

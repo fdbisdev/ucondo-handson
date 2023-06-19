@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { IHeader, RootParamList } from '../../utils/types';
+import { IHeader, IListItem, RootParamList } from '../../utils/types';
 import { colors } from '../../utils/constants';
 
 import styles from './styles';
