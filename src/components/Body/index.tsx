@@ -396,6 +396,7 @@ const Body: React.FC<IBody> = ({ searchable, details }: IBody) => {
                             setOpen={setParentPicker}
                             style={styles.dropDownPicker}
                             placeholder="Selecione"
+                            dropDownDirection='TOP'
                             value={parent}
                             setValue={setParent}
                             onChangeValue={(value) => handleSetCode(value)}
