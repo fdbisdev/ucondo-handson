@@ -92,7 +92,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
             }
         })
         setFilteredList(bills.sort(orderByCode))
-        setParentsList(parents.filter((item) => item !== undefined));
+        setParentsList([{ label: 'Nenhum', value: 0 }, ...parents.filter((item) => item !== undefined)]);
     }, [bills, selectedToDelete])
 
     const renderListElement = (item: IListItem) => {

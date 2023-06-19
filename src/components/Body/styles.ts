@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     listHeaderAdded: {
         paddingHorizontal: 23,
         marginTop: 23,
+        flex: 1,
     },
     dropDownPicker: {
         marginTop: 4,
