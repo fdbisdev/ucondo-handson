@@ -60,11 +60,13 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
 
     const handleSetCode = (value: any) => {
         if (value === 0) return
+
         const code = bills.filter((item) => {
             if (item.code === value) {
                 return item.code
             }
         })
+
         const parentFirstElement = code[0].code.toString().split('.')[0]
 
         const codes = bills.map((item) => {
@@ -101,7 +103,10 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
 
         if (!lastCode) return
 
-        const newCode = lastCode.split('.')[0] + '.' + (parseInt(lastCode.split('.')[1]) + 1)
+        let childCode = parseInt(lastCode.split('.')[1])
+        if (Number.isNaN(childCode)) childCode = 0
+
+        const newCode = lastCode.split('.')[0] + '.' + (childCode + 1)
 
         setNewBill({
             ...newBill,
