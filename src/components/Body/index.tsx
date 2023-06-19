@@ -158,7 +158,6 @@ const Body: React.FC<IBody> = ({ searchable, details }: IBody) => {
     }
 
     const findParent = (code: string) => {
-        console.log('code', code);
         if (!code) return 'Nenhum'
         const parent = bills.filter((item) => {
             if (item.code === code) {

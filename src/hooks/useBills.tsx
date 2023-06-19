@@ -57,7 +57,6 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
 
     const saveBill = async (bill: IListItem) => {
         setLoading(true);
-        console.log('bill', bill);
         let handleError = '';
 
         if (Object.keys(bill).length === 0) {
