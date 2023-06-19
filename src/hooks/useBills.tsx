@@ -57,6 +57,7 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
 
     const saveBill = async (bill: IListItem) => {
         setLoading(true);
+        console.log(bill);
         let handleError = '';
 
         if (Object.keys(bill).length === 0) {
@@ -74,9 +75,11 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
         }
 
         setError(handleError);
+        console.log(handleError, error);
 
         if (!error && !handleError) {
             const billsStoraged = await AsyncStorage.getItem('@bills');
+            console.log(billsStoraged);
 
             let maxId = 0;
 
@@ -100,6 +103,31 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
                 }
 
                 const newBills = [...billsParsed, newBillData];
+                try {
+                    await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
+                    await getBills();
+
+                    Alert.alert('Conta inserida com sucesso!');
+                }
+                catch (error) {
+                    Alert.alert('Ooops! Erro ao inserir conta, por favor tente novamente.');
+                }
+                finally {
+                    setLoading(false);
+                    setNewBill({} as IListItem);
+                }
+            }
+            else {
+                const newBillData: IListItem = {
+                    id: 1,
+                    title: bill.title,
+                    type: bill.type,
+                    code: bill.code,
+                    acceptLaunch: bill.acceptLaunch ?? true,
+                    parent: bill.parent ?? null,
+                }
+
+                const newBills = [newBillData];
                 try {
                     await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
                     await getBills();
