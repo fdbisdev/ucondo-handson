@@ -55,10 +55,27 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
 
     }, []);
 
-    const saveBill = useCallback(async (bill: IListItem) => {
+    const saveBill = async (bill: IListItem) => {
         setLoading(true);
+        let handleError = '';
 
-        if (error === '') {
+        if (Object.keys(bill).length === 0) {
+            handleError = 'Preencha os campos corretamente!';
+        }
+
+        if (!bill.title) {
+            handleError = 'O campo título é obrigatório!';
+        }
+        else if (!bill.code) {
+            handleError = 'O campo código é obrigatório!';
+        }
+        else if (!bill.type) {
+            handleError = 'O campo tipo é obrigatório!';
+        }
+
+        setError(handleError);
+
+        if (!error && !handleError) {
             const billsStoraged = await AsyncStorage.getItem('@bills');
 
             let maxId = 0;
@@ -98,11 +115,11 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             }
         }
         else {
-            Alert.alert(error);
+            Alert.alert(error || handleError);
             setLoading(false);
-            setError('');
         }
-    }, []);
+        setError('');
+    }
 
     const deleteBill = useCallback(async (item: IListItem | null) => {
         if (!item) return;

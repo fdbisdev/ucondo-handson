@@ -37,15 +37,22 @@ const Header: React.FC<IHeader> = ({ title, rightIcon, leftIcon, pressableFuncti
                     }
                     <Text style={styles.title}>{title}</Text>
                 </View>
-                <Pressable
-                    onPress={() => pressableFunction()}
-                >
-                    <FontAwesomeIcon
-                        size={28}
-                        color={colors.white}
-                        icon={rightIcon}
-                    />
-                </Pressable>
+                {
+                    (rightIcon && pressableFunction) &&
+                    (
+                        <Pressable
+                            onPress={
+                                () => pressableFunction()
+                            }
+                        >
+                            <FontAwesomeIcon
+                                size={28}
+                                color={colors.white}
+                                icon={rightIcon}
+                            />
+                        </Pressable>
+                    )
+                }
             </View>
         </View>
     )

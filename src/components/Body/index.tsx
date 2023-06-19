@@ -6,12 +6,14 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactNativeModal from 'react-native-modal';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import { IBody, IListItem } from '../../utils/types';
+import { IBody, IListItem, RootParamList } from '../../utils/types';
 import { SCREEN_HEIGHT, acceptLaunch, colors, types } from '../../utils/constants';
 import { useBill } from '../../hooks/useBills';
 
 import styles from './styles';
 import { orderByCode } from '../../utils/functions';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [launchPicker, setLaunchPicker] = React.useState<boolean>(false);
@@ -37,14 +39,19 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         error
     } = useBill();
 
+    const navigation = useNavigation<NativeStackNavigationProp<RootParamList>>();
+
     const handleDelete = useCallback((item: IListItem) => {
         setModalVisibility(true);
         setSelectedToDelete(item);
     }, [])
 
     const handleConfirmDelete = () => {
-        console.log(selectedToDelete)
         deleteBill(selectedToDelete);
+    }
+
+    const handleGoToDetails = (item: IListItem) => {
+        navigation.navigate('Details', { item });
     }
 
     const formatParentName = (item: IListItem) => {
@@ -103,9 +110,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     }
 
     const handleChangeCode = (value: any) => {
-        console.log('value: ', value)
         value.split('.').map((item: string) => {
-            console.log('item: ', item)
             if (Number(item) > 999) {
                 setError('Código inválido')
             }
@@ -113,7 +118,6 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
 
         bills.map((item) => {
             if (item.code === value) {
-                console.log('item.code: ', item.code)
                 if (error !== '') {
                     setError('Código já existente')
                 }
@@ -165,7 +169,9 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
 
     const renderListElement = (item: IListItem) => {
         return (
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+                onPress={() => handleGoToDetails(item)}
+            >
                 <View style={styles.listElement}>
                     <View style={styles.listElementHeader}>
                         <Text style={[styles.listElementTitle, {

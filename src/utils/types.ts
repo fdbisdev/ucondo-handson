@@ -1,15 +1,17 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootParamList = {
     Home: undefined;
     NewRevenue: undefined;
+    Details: { item: IListItem };
 };
 
 export interface IHeader {
     title: string;
-    rightIcon: IconProp;
+    rightIcon?: IconProp;
     leftIcon?: IconProp;
-    pressableFunction: (item?: IListItem) => void;
+    pressableFunction?: (item?: IListItem) => void;
 }
 
 export interface IBody {
