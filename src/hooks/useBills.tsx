@@ -58,42 +58,48 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     const saveBill = useCallback(async (bill: IListItem) => {
         setLoading(true);
 
-        const billsStoraged = await AsyncStorage.getItem('@bills');
+        if (error === '') {
+            const billsStoraged = await AsyncStorage.getItem('@bills');
 
-        let maxId = 0;
+            let maxId = 0;
 
-        if (billsStoraged) {
-            const billsParsed: IListItem[] = JSON.parse(billsStoraged);
+            if (billsStoraged) {
+                const billsParsed: IListItem[] = JSON.parse(billsStoraged);
 
-            if (billsParsed.length === 0) {
-                maxId = 1;
-            }
-            else {
-                maxId = billsParsed.reduce((prev, current) => (prev.id > current.id) ? prev : current).id;
-            }
+                if (billsParsed.length === 0) {
+                    maxId = 1;
+                }
+                else {
+                    maxId = billsParsed.reduce((prev, current) => (prev.id > current.id) ? prev : current).id;
+                }
 
-            const newBillData: IListItem = {
-                id: maxId + 1,
-                title: bill.title,
-                type: bill.type,
-                code: bill.code,
-                acceptLaunch: bill.acceptLaunch ?? true,
-            }
+                const newBillData: IListItem = {
+                    id: maxId + 1,
+                    title: bill.title,
+                    type: bill.type,
+                    code: bill.code,
+                    acceptLaunch: bill.acceptLaunch ?? true,
+                }
 
-            const newBills = [...billsParsed, newBillData];
-            try {
-                await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
-                await getBills();
+                const newBills = [...billsParsed, newBillData];
+                try {
+                    await AsyncStorage.setItem('@bills', JSON.stringify(newBills));
+                    await getBills();
 
-                Alert.alert('Conta inserida com sucesso!');
+                    Alert.alert('Conta inserida com sucesso!');
+                }
+                catch (error) {
+                    Alert.alert('Ooops! Erro ao inserir conta, por favor tente novamente.');
+                }
+                finally {
+                    setLoading(false);
+                    setNewBill({} as IListItem);
+                }
             }
-            catch (error) {
-                Alert.alert('Ooops! Erro ao inserir conta, por favor tente novamente.');
-            }
-            finally {
-                setLoading(false);
-                setNewBill({} as IListItem);
-            }
+        }
+        else {
+            Alert.alert(error);
+            setLoading(false);
         }
     }, []);
 

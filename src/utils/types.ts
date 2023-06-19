@@ -49,4 +49,3 @@ export interface IModal {
     visible: boolean;
     selected: IListItem | null; 
 }
-

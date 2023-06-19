@@ -33,7 +33,6 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         newBill,
         filtedList,
         setFiltedList,
-        error,
         setError,
     } = useBill();
 
@@ -58,10 +57,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                 return item.code
             }
         })
-        const numberOfDecimals = code[0].code.toString().split('.')[0].length - 1
         const parentFirstElement = code[0].code.toString().split('.')[0]
-        console.log('first parent element: ', parentFirstElement)
-        console.log('number of decimals: ', numberOfDecimals)
 
         const codes = bills.map((item) => {
             const firstElement = item.code.toString().split('.')[0]
@@ -70,12 +66,10 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
             }
         })
 
-        const filteredCodes = codes.filter((item) => item !== undefined)
+        const filteredCodes: string[] = codes.filter((item) => item !== undefined) as string[]
 
-        console.log('filtered codes: ', filteredCodes)
-
-        const ordenedCodes = filteredCodes.sort((a: string | undefined, b: string | undefined) => {
-            let ret = 0;
+        const ordenedCodes = filteredCodes.sort((a: string, b: string): number => {
+            let ret: number | undefined = 0;
             let aSplit = a && a.split('.');
             let bSplit = b && b.split('.');
 
@@ -90,19 +84,17 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
 
                 return ret;
             }
-        })
+            else {
+                return 0
+            }
+        }) as string[]
 
-        console.log('ordened codes: ', ordenedCodes)
-
-        const lastCode = ordenedCodes[ordenedCodes.length - 1]
-
-        console.log('last code: ', lastCode)
+        const lastCode = ordenedCodes.pop()
 
         if (!lastCode) return
 
         const newCode = lastCode.split('.')[0] + '.' + (parseInt(lastCode.split('.')[1]) + 1)
 
-        console.log('new code: ', newCode)
         setNewBill({
             ...newBill,
             code: newCode,
@@ -112,6 +104,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const handleChangeCode = (value: any) => {
         bills.map((item) => {
             if (item.code === value) {
+                console.log('item.code: ', item.code)
                 setError('Código já existente')
             }
         })
