@@ -15,12 +15,14 @@ const styles = StyleSheet.create({
     },
     searchIcon: {
         marginRight: 18,
-
     },
     searchBar: {
         flexDirection: 'row',
         alignItems: 'center',
         flex: 1,    
+    },
+    searchInput: {
+        color: colors.placeholder,
     }
 });
 

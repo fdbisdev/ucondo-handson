@@ -52,6 +52,8 @@ const Home: React.FC = () => {
                             placeholder='Pesquisar conta'
                             value={searchItem || ''}
                             onChangeText={setSearchItem}
+                            style={styles.searchInput}
+                            placeholderTextColor={colors.placeholder}
                         />
                     </View>
                 </View>
