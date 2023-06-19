@@ -37,6 +37,8 @@ export interface IBillsParams {
     filtedList: IListItem[]
     setFiltedList: (value: IListItem[]) => void
     handleSearch: (value: string) => void
+    error: string
+    setError: (value: string) => void
 }
 
 export interface Props {

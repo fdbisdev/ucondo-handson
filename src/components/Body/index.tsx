@@ -23,7 +23,19 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
     const [parentsList, setParentsList] = React.useState<any[]>([]);
     const [selectedToDelete, setSelectedToDelete] = React.useState<IListItem | null>(null);
 
-    const { bills, loading, deleteBill, modalVisibility, setModalVisibility, setNewBill, newBill, filtedList, setFiltedList } = useBill();
+    const {
+        bills,
+        loading,
+        deleteBill,
+        modalVisibility,
+        setModalVisibility,
+        setNewBill,
+        newBill,
+        filtedList,
+        setFiltedList,
+        error,
+        setError,
+    } = useBill();
 
     const handleDelete = useCallback((item: IListItem) => {
         setModalVisibility(true);
@@ -39,17 +51,70 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
         return String(item.code + ' - ' + item.title);
     }
 
-    const handleSetCode = useCallback((value: any) => {
-        const code = bills.find((item) => item.code === value);
-        if (code?.code) {
-            setNewBill({
-                ...newBill,
-                code: code.code + 1,
-            });
-        }
-    }, [])
+    const handleSetCode = (value: any) => {
+        if (value === 0) return
+        const code = bills.filter((item) => {
+            if (item.code === value) {
+                return item.code
+            }
+        })
+        const numberOfDecimals = code[0].code.toString().split('.')[0].length - 1
+        const parentFirstElement = code[0].code.toString().split('.')[0]
+        console.log('first parent element: ', parentFirstElement)
+        console.log('number of decimals: ', numberOfDecimals)
+
+        const codes = bills.map((item) => {
+            const firstElement = item.code.toString().split('.')[0]
+            if (firstElement === parentFirstElement) {
+                return item.code
+            }
+        })
+
+        const filteredCodes = codes.filter((item) => item !== undefined)
+
+        console.log('filtered codes: ', filteredCodes)
+
+        const ordenedCodes = filteredCodes.sort((a: string | undefined, b: string | undefined) => {
+            let ret = 0;
+            let aSplit = a && a.split('.');
+            let bSplit = b && b.split('.');
+
+            if (aSplit && bSplit) {
+
+                for (let i = 0; i < aSplit.length; i++) {
+                    if (aSplit[i] !== bSplit[i]) {
+                        ret = parseInt(aSplit[i]) - parseInt(bSplit[i]);
+                        break;
+                    }
+                }
+
+                return ret;
+            }
+        })
+
+        console.log('ordened codes: ', ordenedCodes)
+
+        const lastCode = ordenedCodes[ordenedCodes.length - 1]
+
+        console.log('last code: ', lastCode)
+
+        if (!lastCode) return
+
+        const newCode = lastCode.split('.')[0] + '.' + (parseInt(lastCode.split('.')[1]) + 1)
+
+        console.log('new code: ', newCode)
+        setNewBill({
+            ...newBill,
+            code: newCode,
+        })
+    }
 
     const handleChangeCode = (value: any) => {
+        bills.map((item) => {
+            if (item.code === value) {
+                setError('Código já existente')
+            }
+        })
         setNewBill({
             ...newBill,
             code: value,
@@ -240,6 +305,7 @@ const Body: React.FC<IBody> = ({ searchable }: IBody) => {
                             placeholder="Selecione"
                             value={parent}
                             setValue={setParent}
+                            onChangeValue={(value) => handleSetCode(value)}
                             items={parentsList}
                             placeholderStyle={{
                                 color: colors.placeholder,

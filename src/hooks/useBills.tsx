@@ -21,6 +21,7 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
     const [modalVisibility, setModalVisibility] = React.useState<boolean>(false);
     const [newBill, setNewBill] = React.useState<IListItem>({} as IListItem);
     const [filtedList, setFiltedList] = React.useState<IListItem[]>([]);
+    const [error, setError] = React.useState<string>('');
 
     const handleSearch = useCallback(async (search: string) => {
         setLoading(true);
@@ -136,6 +137,8 @@ export const BillsProvider: React.FC<Props> = ({ children }: Props) => {
             filtedList,
             setFiltedList,
             handleSearch,
+            error,
+            setError
         }}>
             {children}
         </BillsContext.Provider>
